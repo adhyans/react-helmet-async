@@ -216,10 +216,11 @@ export class Helmet extends Component {
 	}
 
 	render() {
-		console.log(children);
-		console.log(props);
 		const { children, ...props } = this.props;
 		let newProps = { ...props };
+		console.log('In librart');
+		console.log(children);
+		console.log(newProps);
 
 		if (children) {
 			newProps = this.mapChildrenToProps(children, newProps);
