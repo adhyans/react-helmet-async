@@ -6,64 +6,65 @@ import { reducePropsToState } from './utils';
 import Provider, { providerShape } from './Provider';
 
 export default class Dispatcher extends Component {
-  static propTypes = {
-    context: providerShape.isRequired,
-  };
+	static propTypes = {
+		context: providerShape.isRequired
+	};
 
-  static displayName = 'HelmetDispatcher';
+	static displayName = 'HelmetDispatcher';
 
-  rendered = false;
+	rendered = false;
 
-  shouldComponentUpdate(nextProps) {
-    return !shallowEqual(nextProps, this.props);
-  }
+	shouldComponentUpdate(nextProps) {
+		return !shallowEqual(nextProps, this.props);
+	}
 
-  componentDidUpdate() {
-    this.emitChange();
-  }
+	componentDidUpdate() {
+		this.emitChange();
+	}
 
-  componentWillUnmount() {
-    const { helmetInstances } = this.props.context;
-    helmetInstances.remove(this);
-    this.emitChange();
-  }
+	componentWillUnmount() {
+		const { helmetInstances } = this.props.context;
+		helmetInstances.remove(this);
+		this.emitChange();
+	}
 
-  emitChange() {
-    const { helmetInstances, setHelmet } = this.props.context;
-    let serverState = null;
-    const state = reducePropsToState(
-      helmetInstances.get().map(instance => {
-        const props = { ...instance.props };
-        delete props.context;
-        return props;
-      })
-    );
-    if (Provider.canUseDOM) {
-      handleStateChangeOnClient(state);
-    } else if (mapStateOnServer) {
-      serverState = mapStateOnServer(state);
-    }
-    setHelmet(serverState);
-  }
+	emitChange() {
+		const { helmetInstances, setHelmet } = this.props.context;
+		let serverState = null;
+		const state = reducePropsToState(
+			helmetInstances.get().map((instance) => {
+				const props = { ...instance.props };
+				delete props.context;
+				return props;
+			})
+		);
+		if (Provider.canUseDOM) {
+			handleStateChangeOnClient(state);
+		} else if (mapStateOnServer) {
+			serverState = mapStateOnServer(state);
+		}
+		setHelmet(serverState);
+	}
 
-  // componentWillMount will be deprecated
-  // for SSR, initialize on first render
-  // constructor is also unsafe in StrictMode
-  init() {
-    if (this.rendered) {
-      return;
-    }
+	// componentWillMount will be deprecated
+	// for SSR, initialize on first render
+	// constructor is also unsafe in StrictMode
+	init() {
+		if (this.rendered) {
+			return;
+		}
 
-    this.rendered = true;
+		this.rendered = true;
 
-    const { helmetInstances } = this.props.context;
-    helmetInstances.add(this);
-    this.emitChange();
-  }
+		const { helmetInstances } = this.props.context;
+		console.log('In dispatcher', this.props.context);
+		helmetInstances.add(this);
+		this.emitChange();
+	}
 
-  render() {
-    this.init();
+	render() {
+		this.init();
 
-    return null;
-  }
+		return null;
+	}
 }
