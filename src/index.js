@@ -226,6 +226,8 @@ export class Helmet extends Component {
 			newProps = this.mapChildrenToProps(children, newProps);
 		}
 
+		console.log(newProps);
+
 		return <Context.Consumer>{(context) => <Dispatcher {...newProps} context={context} />}</Context.Consumer>;
 	}
 }
