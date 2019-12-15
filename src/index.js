@@ -218,7 +218,7 @@ export class Helmet extends Component {
 	render() {
 		const { children, ...props } = this.props;
 		let newProps = { ...props };
-		console.log('In librart');
+		console.log('In library');
 		console.log(children);
 		console.log(newProps);
 
@@ -228,6 +228,14 @@ export class Helmet extends Component {
 
 		console.log(newProps);
 
-		return <Context.Consumer>{(context) => <Dispatcher {...newProps} context={context} />}</Context.Consumer>;
+		return (
+			<Context.Consumer>
+				{(context) => {
+					console.log('context', context);
+					console.log('rendering dispatcher');
+					return <Dispatcher {...newProps} context={context} />;
+				}}
+			</Context.Consumer>
+		);
 	}
 }
