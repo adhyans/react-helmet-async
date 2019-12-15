@@ -39,7 +39,11 @@ export default class Provider extends Component {
 		setHelmet: (serverState) => {
 			// eslint-disable-next-line react/prop-types
 			console.log('serverstate', serverState);
-			console.log('title on server', serverState.title.toString());
+			if (serverState.title) {
+				if (serverState.title.toString()) {
+					console.log('title on server', serverState.title.toString());
+				}
+			}
 			this.props.context.helmet = serverState;
 		},
 		helmetInstances: {
